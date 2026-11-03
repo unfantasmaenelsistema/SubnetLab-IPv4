@@ -1,0 +1,6 @@
+{
+  "name": "SubnetLab IPv4 — Calculadora y Retador de Subnetting",
+  "description": "Entrenador contra reloj, calculadora interactiva en binario y arquitecto de topologías VLSM para el cálculo profesional de subredes IPv4, por Un Fantasma en el Sistema.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

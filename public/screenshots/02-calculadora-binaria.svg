@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675">
+  <rect width="1200" height="675" fill="#020617"/>
+  <rect x="0" y="0" width="1200" height="58" fill="#0f172a" stroke="#1e293b"/>
+  <text x="40" y="35" fill="#f8fafc" font-family="sans-serif" font-size="18" font-weight="bold">SubnetLab IPv4 — Calculadora Interactiva &amp; Matriz Binaria de 32 Bits</text>
+
+  <!-- Input Bar -->
+  <rect x="32" y="78" width="1136" height="96" rx="12" fill="#0f172a" stroke="#1e293b" stroke-width="1.5"/>
+  <text x="54" y="106" fill="#94a3b8" font-family="sans-serif" font-size="12">Dirección IPv4 de Host o Red</text>
+  <rect x="54" y="116" width="280" height="40" rx="8" fill="#020617" stroke="#0284c7" stroke-width="1.5"/>
+  <text x="72" y="142" fill="#f8fafc" font-family="monospace" font-size="18" font-weight="bold">192.168.10.140</text>
+
+  <text x="365" y="106" fill="#94a3b8" font-family="sans-serif" font-size="12">Prefijo CIDR: /26 (24 bits red · 2 bits subred · 6 bits host)</text>
+  <rect x="365" y="116" width="460" height="40" rx="8" fill="#020617" stroke="#1e293b"/>
+  <line x1="400" y1="136" x2="790" y2="136" stroke="#1e293b" stroke-width="6" stroke-linecap="round"/>
+  <line x1="400" y1="136" x2="705" y2="136" stroke="#0284c7" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="705" cy="136" r="9" fill="#38bdf8"/>
+
+  <text x="855" y="106" fill="#94a3b8" font-family="sans-serif" font-size="12">Máscara en Decimal</text>
+  <rect x="855" y="116" width="290" height="40" rx="8" fill="#020617" stroke="#1e293b"/>
+  <text x="875" y="142" fill="#38bdf8" font-family="monospace" font-size="16" font-weight="bold">255.255.255.192</text>
+
+  <!-- Left: Parameters Card -->
+  <rect x="32" y="194" width="440" height="450" rx="12" fill="#0f172a" stroke="#1e293b" stroke-width="1.5"/>
+  <text x="54" y="228" fill="#ffffff" font-family="sans-serif" font-size="16" font-weight="bold">Parámetros Calculados de la Red</text>
+  <text x="54" y="268" fill="#94a3b8" font-family="sans-serif" font-size="13">Dirección IP de Red</text>
+  <text x="448" y="268" fill="#38bdf8" font-family="monospace" font-size="15" font-weight="bold" text-anchor="end">192.168.10.128/26</text>
+  <text x="54" y="308" fill="#94a3b8" font-family="sans-serif" font-size="13">Primer Host Disponible</text>
+  <text x="448" y="308" fill="#34d399" font-family="monospace" font-size="15" font-weight="bold" text-anchor="end">192.168.10.129</text>
+  <text x="54" y="348" fill="#94a3b8" font-family="sans-serif" font-size="13">Último Host Disponible</text>
+  <text x="448" y="348" fill="#34d399" font-family="monospace" font-size="15" font-weight="bold" text-anchor="end">192.168.10.190</text>
+  <text x="54" y="388" fill="#94a3b8" font-family="sans-serif" font-size="13">Dirección de Broadcast</text>
+  <text x="448" y="388" fill="#fbbf24" font-family="monospace" font-size="15" font-weight="bold" text-anchor="end">192.168.10.191</text>
+  <text x="54" y="428" fill="#94a3b8" font-family="sans-serif" font-size="13">Máscara Wildcard (OSPF)</text>
+  <text x="448" y="428" fill="#cbd5e1" font-family="monospace" font-size="14" text-anchor="end">0.0.0.63</text>
+  <text x="54" y="468" fill="#94a3b8" font-family="sans-serif" font-size="13">Hosts Útiles (2^6 − 2)</text>
+  <text x="448" y="468" fill="#ffffff" font-family="monospace" font-size="15" font-weight="bold" text-anchor="end">62 hosts</text>
+  <text x="54" y="508" fill="#94a3b8" font-family="sans-serif" font-size="13">Número Mágico / Salto</text>
+  <text x="448" y="508" fill="#38bdf8" font-family="monospace" font-size="15" font-weight="bold" text-anchor="end">64 (4º octeto)</text>
+  <text x="54" y="548" fill="#94a3b8" font-family="sans-serif" font-size="13">Ámbito RFC 1918</text>
+  <text x="448" y="548" fill="#cbd5e1" font-family="sans-serif" font-size="13" text-anchor="end">Privada Clase C</text>
+
+  <!-- Right: 32-Bit Matrix & CLI -->
+  <rect x="492" y="194" width="676" height="450" rx="12" fill="#0f172a" stroke="#1e293b" stroke-width="1.5"/>
+  <text x="516" y="228" fill="#ffffff" font-family="sans-serif" font-size="16" font-weight="bold">Matriz Binaria Interactiva de 32 Bits (Clic para Conmutar 0/1)</text>
+  <text x="516" y="252" fill="#38bdf8" font-family="sans-serif" font-size="12">■ Red (24 bits)   <tspan fill="#fbbf24">■ Subred Prestada (+2 bits)</tspan>   <tspan fill="#34d399">■ Host (6 bits)</tspan></text>
+
+  <!-- Binary Rows -->
+  <rect x="516" y="270" width="628" height="68" rx="8" fill="#020617" stroke="#1e293b"/>
+  <text x="532" y="292" fill="#cbd5e1" font-family="sans-serif" font-size="12">Dirección IPv4 (192.168.10.140)</text>
+  <text x="532" y="322" fill="#38bdf8" font-family="monospace" font-size="18" font-weight="bold" letter-spacing="2">11000000.10101000.00001010.<tspan fill="#fbbf24">10</tspan><tspan fill="#34d399">001100</tspan></text>
+
+  <rect x="516" y="350" width="628" height="68" rx="8" fill="#020617" stroke="#1e293b"/>
+  <text x="532" y="372" fill="#cbd5e1" font-family="sans-serif" font-size="12">Máscara de Subred /26 (255.255.255.192)</text>
+  <text x="532" y="402" fill="#38bdf8" font-family="monospace" font-size="18" font-weight="bold" letter-spacing="2">11111111.11111111.11111111.<tspan fill="#fbbf24">11</tspan><tspan fill="#34d399">000000</tspan></text>
+
+  <rect x="516" y="430" width="628" height="68" rx="8" fill="#020617" stroke="#1e293b"/>
+  <text x="532" y="452" fill="#cbd5e1" font-family="sans-serif" font-size="12">Dirección de Red = IP AND Máscara (192.168.10.128)</text>
+  <text x="532" y="482" fill="#38bdf8" font-family="monospace" font-size="18" font-weight="bold" letter-spacing="2">11000000.10101000.00001010.<tspan fill="#fbbf24">10</tspan><tspan fill="#34d399">000000</tspan></text>
+
+  <!-- CLI Preview Box -->
+  <rect x="516" y="512" width="628" height="112" rx="8" fill="#020617" stroke="#334155"/>
+  <text x="532" y="534" fill="#38bdf8" font-family="monospace" font-size="11" font-weight="bold">! Generador Automático CLI (Cisco IOS / Linux iproute2 / MikroTik)</text>
+  <text x="532" y="556" fill="#e2e8f0" font-family="monospace" font-size="12">interface GigabitEthernet0/0.10</text>
+  <text x="532" y="576" fill="#34d399" font-family="monospace" font-size="12"> encapsulation dot1Q 10  |  ip address 192.168.10.129 255.255.255.192</text>
+  <text x="532" y="596" fill="#fbbf24" font-family="monospace" font-size="12"> router ospf 1  →  network 192.168.10.128 0.0.0.63 area 0</text>
+</svg>
