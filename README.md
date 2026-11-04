@@ -1,157 +1,120 @@
-<div align="center">
-  <a href="https://www.unfantasmaenelsistema.com/">
-    <img src="./public/assets/aistudio/icono_81a3db5b.png" alt="Logo Un Fantasma en el Sistema" width="120" height="120" />
-  </a>
+<p align="center">
+  <a href="https://www.unfantasmaenelsistema.com"><img src="public/assets/aistudio/icono_81a3db5b.png" width="110" alt="Un fantasma en el sistema"></a>
+</p>
 
-  # SubnetLab IPv4 — Calculadora, Laboratorio Binario y Retador Contra Reloj
+<h1 align="center">SubnetLab IPv4</h1>
 
-  **Entrenador interactivo de subnetting IPv4, diseño de topologías FLSM/VLSM, diagnóstico de incidencias de red y generador de configuraciones CLI reales (Cisco IOS, Linux `iproute2`, MikroTik).**
+<p align="center">
+  <b>Calculadora, retador contrarreloj y diseñador VLSM de subnetting IPv4</b><br>
+  Método del número mágico paso a paso · 5 tipos de reto · Diagnóstico de fallos · Sumarización de rutas · Configuración Cisco, Linux y MikroTik
+</p>
 
-  Desarrollado para **[Un Fantasma en el Sistema](https://www.unfantasmaenelsistema.com/)** · Preparado para despliegue directo en **GitHub Pages**
+<p align="center">
+  <a href="https://unfantasmaenelsistema.github.io/SubnetLab-IPv4/"><b>▶ Abrir SubnetLab</b></a> ·
+  <a href="#qué-hace">Qué hace</a> ·
+  <a href="#el-método-del-número-mágico">Método</a> ·
+  <a href="#cómo-puntúa-el-retador">Puntuación</a> ·
+  <a href="#desarrollo">Desarrollo</a> ·
+  <a href="https://www.unfantasmaenelsistema.com">unfantasmaenelsistema.com</a> ·
+  <a href="LICENSE">MIT</a>
+</p>
 
-  [![Web Oficial](https://img.shields.io/badge/Web-unfantasmaenelsistema.com-0284c7?style=for-the-badge)](https://www.unfantasmaenelsistema.com/)
-  [![React 19](https://img.shields.io/badge/React-19-1e293b?style=for-the-badge&logo=react)](https://react.dev/)
-  [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-1e293b?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-  [![Tailwind CSS v4](https://img.shields.io/badge/Tailwind_CSS-v4-06b6d4?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com/)
-  [![GitHub Pages Ready](https://img.shields.io/badge/GitHub_Pages-Ready-059669?style=for-the-badge&logo=github)](https://pages.github.com/)
-</div>
+<p align="center">
+  <img src="https://img.shields.io/badge/navegador-sin_servidor-10b981?style=flat-square" alt="Sin servidor">
+  <img src="https://img.shields.io/badge/datos-100%25_locales-0284c7?style=flat-square" alt="Datos 100 % locales">
+  <img src="https://img.shields.io/badge/retos-5_tipos-f59e0b?style=flat-square" alt="5 tipos de reto">
+  <img src="https://img.shields.io/badge/licencia-MIT-blue?style=flat-square" alt="MIT">
+</p>
 
----
+<p align="center">
+  <img src="docs/capturas/01-retador.webp" width="900" alt="Retador de cálculo de red con 192.168.195.15/27 resuelto: red, broadcast, primer y último host, máscara decimal, hosts útiles y máscara binaria, todo marcado como correcto, y el historial con la puntuación">
+</p>
 
-## Descripción General
+Una aplicación para practicar subnetting IPv4 hasta resolverlo de cabeza: calcula cualquier red explicando cada paso, genera retos aleatorios con cinco niveles de dificultad y corrige cada campo diciendo dónde está el error (por ejemplo, «has puesto la IP de red como primer host»). Incluye un diseñador VLSM con simulador de enrutamiento y una chuleta completa de /8 a /32.
 
-**SubnetLab IPv4** es una plataforma web educativa y herramienta de ingeniería de redes diseñada para estudiantes de administración de sistemas y redes (ASIR, SMR, Ingeniería Telemática, certificaciones **Cisco CCNA / CCNP**, CompTIA Network+) y profesionales de infraestructura IT.
+> [!NOTE]
+> Todo funciona en el navegador, sin servidor ni peticiones de red. Las estadísticas y los récords se guardan solo en el `localStorage` de ese navegador y se pueden exportar en JSON.
 
-Combina un **retador gamificado contra reloj** con un **laboratorio binario bit a bit de 32 bits** y un **arquitecto de subredes VLSM** con simulación de enrutamiento de paquetes en Capa 2 y Capa 3.
+## Qué hace
 
----
+**Retador contrarreloj** (modo libre o con 1, 3 o 5 minutos), con cinco tipos de reto y cuatro niveles (inicial, intermedio, avanzado y CCNA):
 
-## Capturas de Pantalla de los Módulos
+1. **Cálculo de red**: a partir de una IP y su prefijo (CIDR o máscara decimal), red, broadcast, primer y último host, máscara en la otra notación y en binario, y hosts útiles.
+2. **Topología FLSM**: con un número mínimo de subredes o de hosts por subred, bits prestados, nuevo prefijo, máscara, subredes creadas, hosts por subred y el rango de una subred concreta del esquema.
+3. **Diagnóstico de fallos**: un equipo no llega a su puerta de enlace; hay que encontrar la causa (IP de red, IP de broadcast, otra subred o máscara distinta) y el rango correcto.
+4. **Sumarización de rutas**: de 4 u 8 redes contiguas, la superred exacta que las agrupa.
+5. **Sprint binario**: salto de bloque, máscara en binario, red y broadcast a toda velocidad.
 
-### 1. Retador Contra Reloj y Diseño para Topologías Dadas
-Entrenador con 5 modalidades prácticas, reloj de competición (**Libre**, **60s Blitz**, **3m Sprint**, **5m Examen**), 4 niveles de dificultad CIDR, regla binaria desplegable y corrección inteligente octeto a octeto.
+**Calculadora y laboratorio binario**: matriz de 32 bits que se puede pulsar bit a bit, explicación en 5 pasos, comparador de dos IP (misma subred o enrutamiento), lista de subredes al subdividir y ejemplos de configuración para Cisco IOS, Linux (`iproute2`) y MikroTik RouterOS.
 
-![Captura Retador Contra Reloj](./public/screenshots/01-retador-contrarreloj.svg)
+**Arquitecto VLSM**: ordena las subredes de mayor a menor, las asigna sin solaparse, muestra el mapa de ocupación, detecta si no caben, simula el reenvío de paquetes por prefijo más largo, genera el script del router y exporta a CSV y Markdown. Tiene un modo de autoevaluación que oculta las soluciones hasta comprobar.
 
----
+**Academia y chuleta**: el método del número mágico, clases y rangos especiales, y la tabla completa de /8 a /32 con filtro por octeto.
 
-### 2. Calculadora Interactiva IPv4, Matriz Binaria de 32 Bits y Generador CLI
-Permite conmutar cualquier bit (`0` o `1`) haciendo clic directamente en la matriz de 32 bits, visualizar operaciones `AND` / `OR`, comprobar si dos equipos están en el mismo dominio de broadcast (Capa 2 vs Capa 3) y exportar la configuración lista para **Cisco IOS**, **Linux (`iproute2`)** y **MikroTik RouterOS**.
+<p align="center">
+  <img src="docs/capturas/04-vlsm.webp" width="900" alt="Arquitecto VLSM con 192.168.10.0/24 repartido entre seis segmentos (/25, /26, /27, /28 y dos /30), mapa de ocupación al 97 % y simulador de enrutamiento">
+</p>
 
-![Captura Calculadora y Laboratorio Binario](./public/screenshots/02-calculadora-binaria.svg)
+## El método del número mágico
 
----
+| Paso | Qué se hace | Ejemplo `192.168.10.140/26` |
+| :-- | :-- | :-- |
+| 1. Octeto interesante | Donde la máscara pasa de unos a ceros | `/26` → 4.º octeto, `255.255.255.192` |
+| 2. Salto de bloque | `256 − valor de la máscara en ese octeto` | `256 − 192 = 64` |
+| 3. Red | Mayor múltiplo del salto que no supera la IP en ese octeto | `⌊140 / 64⌋ × 64 = 128` → `192.168.10.128` |
+| 4. Broadcast | Siguiente red menos 1 | `128 + 64 − 1 = 191` → `192.168.10.191` |
+| 5. Hosts | `2^h − 2`, de red + 1 a broadcast − 1 | `2^6 − 2 = 62` → `.129` a `.190` |
 
-### 3. Arquitecto de Subredes VLSM y Simulador de Enrutamiento (Longest Prefix Match)
-Calcula asignaciones óptimas sin solapamiento ordenando de mayor a menor demanda de hosts, dibuja el mapa proporcional de ocupación del bloque IPv4, incluye un **Modo Autoevaluación VLSM**, exporta scripts completos **Router-on-a-Stick (`dot1Q` + DHCP + OSPF)** y simula el flujo de paquetes entre VLANs.
+Casos especiales que la app trata aparte: **/31** (2 direcciones, ambas utilizables en enlaces punto a punto, RFC 3021), **/32** (una sola dirección) y las **clases D y E** (multicast y experimental), que no tienen máscara por defecto. También identifica los rangos privados (RFC 1918), CGNAT, APIPA, loopback, «esta red» (0.0.0.0/8) y los de documentación (RFC 5737).
 
-![Captura Arquitecto VLSM](./public/screenshots/03-arquitecto-vlsm.svg)
+<p align="center">
+  <img src="docs/capturas/03-calculadora.webp" width="900" alt="Calculadora con 192.168.10.140/26: matriz binaria de 32 bits, red, broadcast, rango de hosts, explicación en 5 pasos y ejemplos de configuración">
+</p>
 
----
+## Cómo puntúa el retador
 
-## Características Principales
+- **25 puntos por campo correcto** y **50 de bonus** si están todos, más un extra por rapidez, multiplicado por la dificultad **del reto** (×1, ×1,5, ×2,2 o ×2,5).
+- **Pista**: la puntuación del reto se multiplica por 0,7 en cuanto se abre, aunque se cierre antes de comprobar.
+- **Resolver y explicar**: el reto puntúa 0, no cuenta como resuelto y la racha vuelve a 0.
+- **Récords** separados para 1, 3 y 5 minutos, racha actual y mejor racha, e historial exportable en JSON.
 
-### Retador Contra Reloj (5 Escenarios Reales)
-1. **Cálculo Integral de Red**: A partir de una IP y una máscara (en notación CIDR o decimal), solicita calcular:
-   - Dirección IP de Red (`Network ID`)
-   - Dirección IP de Broadcast
-   - Primer y último host disponible
-   - Conversión entre máscara decimal (`255.255.x.x`) y prefijo CIDR (`/xx`)
-   - Máscara en binario de 32 bits (con selector rápido por octetos o entrada manual)
-   - Total de hosts útiles ($2^h - 2$)
-2. **Subredes para Topología FLSM Dada**: Presenta un diagrama lógico con un router central y múltiples ramas/VLANs, pidiendo calcular los bits prestados ($n$), la nueva máscara CIDR y decimal, el número total de subredes creadas ($2^n$), los hosts por subred y el rango exacto de la subred objetivo marcada en el esquema.
-3. **Troubleshooting & Diagnóstico IP**: Simula tickets de soporte reales donde una estación de trabajo no alcanza a su *Default Gateway*, debiendo diagnosticar la causa raíz (*IP en otra subred*, *IP de Red asignada al host*, *IP de Broadcast asignada al host* o *máscara incongruente*) y calcular el rango correcto.
-4. **Sumarización de Rutas OSPF / BGP (Supernetting)**: Presenta bloques contiguos de subredes con su alineación binaria para calcular la ruta sumarizada óptima (`Superred /CIDR` y máscara decimal).
-5. **Sprint Binario & Número Mágico**: Entrenamiento rápido centrado en calcular el salto de bloque (`256 − máscara`), conversión binaria y límites de red en segundos.
+<p align="center">
+  <img src="docs/capturas/02-topologia.webp" width="900" alt="Reto de topología FLSM con el diagrama del router central, las subredes y la hoja de respuestas">
+</p>
 
-### Laboratorio Bitwise y Herramientas Profesionales
-- **Matriz Interactiva de 32 Bits**: Cada bit de los 4 octetos es un botón interactivo codificado por color y leyenda explícita (**Red**, **Subred prestada**, **Host**).
-- **Verificador de Conectividad Capa 2 vs Capa 3**: Compara dos direcciones IP bajo la máscara activa para determinar si se comunican directamente por ARP/Switch o si requieren enrutamiento mediante puerta de enlace.
-- **Generador de Comandos CLI Reales**: Genera automáticamente la configuración de subinterfaces VLAN `802.1Q`, pools DHCP y anuncios OSPF con máscara *wildcard* para **Cisco IOS**, **Linux (`iproute2`)** y **MikroTik RouterOS v7**.
-- **Exportación de Documentación**: Descarga planes de direccionamiento VLSM en formato **CSV** (Excel/LibreOffice), tablas **Markdown** para documentación técnica e informes de progreso en **JSON**.
+## Desarrollo
 
----
-
-## Fundamento Didáctico: El Método del Número Mágico (Salto de Bloque)
-
-La aplicación enseña a resolver cualquier problema de subnetting mentalmente en 5 pasos:
-
-| Paso | Operación | Fórmula / Regla | Ejemplo (`192.168.10.140/26`) |
-| :--- | :--- | :--- | :--- |
-| **01. Octeto Interesante** | Identificar el octeto donde cambia la máscara de `1` a `0` | `/26` = `24 + 2 bits` → **4º octeto** (`192`) | `255.255.255.192` |
-| **02. Salto de Bloque** | Restar a `256` el valor decimal del octeto interesante | $\text{Salto} = 256 - \text{Máscara}$ | $256 - 192 = \mathbf{64}$ |
-| **03. Dirección de Red** | Mayor múltiplo del salto $\le$ valor de la IP en ese octeto | $\lfloor 140 / 64 \rfloor \times 64 = 128$ | **`192.168.10.128`** |
-| **04. Broadcast** | Siguiente subred ($128 + 64 = 192$) menos $1$ | $\text{Broadcast} = \text{Sig\_Red} - 1$ | **`192.168.10.191`** |
-| **05. Rango de Hosts** | Primer host = $\text{Red} + 1$ · Último host = $\text{Broadcast} - 1$ | $\text{Hosts} = 2^6 - 2 = 62$ | **`192.168.10.129` — `192.168.10.190`** |
-
----
-
-## Instalación y Uso Local
-
-### Requisitos previos
-- **Node.js** 18+ y **npm**
-
-### Pasos de ejecución
+Requisitos: Node.js 20 o superior.
 
 ```bash
-# 1. Clonar el repositorio
-git clone https://github.com/TU_USUARIO/subnetlab-ipv4.git
-cd subnetlab-ipv4
-
-# 2. Instalar dependencias
-npm install
-
-# 3. Iniciar servidor de desarrollo (puerto 3000)
-npm run dev
-
-# 4. Generar compilación estática de producción en ./dist
-npm run build
+git clone https://github.com/unfantasmaenelsistema/SubnetLab-IPv4.git
+cd SubnetLab-IPv4
+npm ci
+npm run dev      # http://localhost:3000
+npm test         # 30 tests del motor IPv4 (incluidos miles de retos aleatorios)
+npm run lint     # comprobación de tipos
+npm run build    # versión estática en dist/
 ```
 
----
-
-## Despliegue en GitHub Pages
-
-El proyecto ya incluye:
-1. **`base: './'`** configurado en `vite.config.ts` para que todas las rutas de recursos e iconos funcionen en cualquier subruta (`https://usuario.github.io/nombre-repo/`).
-2. **Workflow automático de GitHub Actions** en `.github/workflows/deploy.yml`.
-
-### Cómo activar GitHub Pages en tu repositorio:
-1. Sube este repositorio a tu cuenta de GitHub (`main` o `master`).
-2. En GitHub, entra en **Settings → Pages**.
-3. En **Build and deployment → Source**, selecciona **GitHub Actions**.
-4. Al hacer push, la acción `.github/workflows/deploy.yml` compilará automáticamente el proyecto con Vite y lo publicará en tu URL de GitHub Pages.
-
----
-
-## Estructura del Proyecto
+Cada `push` a `main` pasa por el workflow [`deploy.yml`](.github/workflows/deploy.yml) (tipos, tests y build) y se publica en GitHub Pages. Los pull requests ejecutan las mismas comprobaciones sin publicar.
 
 ```text
-├── .github/workflows/
-│   └── deploy.yml                  # Despliegue automático en GitHub Pages
-├── public/
-│   ├── assets/aistudio/
-│   │   └── icono_81a3db5b.png      # Logotipo oficial de Un Fantasma en el Sistema
-│   └── screenshots/                # Capturas vectoriales de alta resolución para el README
-├── src/
-│   ├── components/
-│   │   ├── ChallengerView.tsx      # Retador contra reloj (5 modos + historial + pistas)
-│   │   ├── CalculatorView.tsx      # Calculadora IPv4, matriz 32 bits, L2/L3 y CLI
-│   │   ├── VlsmArchitectView.tsx   # Arquitecto VLSM, simulador de paquetes y script Cisco
-│   │   └── AcademyView.tsx         # Academia, regla de octeto y tabla CIDR /8 a /32
-│   ├── utils/
-│   │   └── ipv4.ts                 # Motor matemático 32-bit unsigned, VLSM y generadores
-│   ├── App.tsx                     # Navegación principal, tema claro/oscuro y estado
-│   ├── index.css                   # Configuración Tailwind CSS v4 y tipografía
-│   └── main.tsx                    # Punto de entrada React
-├── index.html                      # Metadatos SEO, OpenGraph y fuentes
-├── package.json
-└── vite.config.ts                  # Configuración Vite con base: './'
+src/
+├── utils/ipv4.ts            Motor: análisis, VLSM, superredes, generador de retos y diagnóstico de respuestas
+├── utils/ipv4.test.ts       Tests (Vitest), con generación masiva de retos para comprobar que todos tienen solución correcta
+├── App.tsx                  Navegación, tema y estadísticas
+└── components/              Retador, calculadora, VLSM y academia
 ```
 
----
+## Novedades de la versión 2
 
-## Autoría y Enlaces
+- **Retos de diagnóstico sin fallo**: con /30, el caso de «máscara distinta» ponía al equipo la misma máscara que la puerta de enlace. Ahora el fallo siempre existe (máscara con 2 bits más y la puerta de enlace fuera de la subred que cree el equipo).
+- **«Otra subred» mal construida**: la IP del equipo podía caer dos subredes más allá o justo en una dirección de red o de broadcast. Ahora es siempre un host válido de la subred siguiente.
+- **Puntuación**: «Resolver y explicar» seguido de «Comprobar» daba la nota máxima y sumaba racha; la penalización por pista se evitaba cerrándola antes de comprobar; el multiplicador usaba la dificultad seleccionada y no la del reto; el modo de 5 minutos mostraba el récord del de 3.
+- **Motor**: el paso a paso mostraba «2^1 − 2 = 2» en /31 y /32; las clases D y E tenían una «máscara por defecto» /4 con bits prestados; 0.0.0.0/8 salía como «pública enrutable» y no se identificaban los rangos de documentación; el VLSM podía no detectar que un bloque se salía al final del espacio IPv4.
+- La autoevaluación VLSM ya no muestra los prefijos en el mapa antes de comprobar; el VLSM avisa si la IP base no es válida; la configuración generada se presenta como ejemplo para adaptar, no como «lista para producción».
+- Fuera dependencias sin uso (Gemini, Express) y las capturas dibujadas en SVG; se arregla la instalación con npm, el diseño ya no se desborda en móvil ni entre 768 y 1023 px, CSP en la build y licencia MIT.
 
-Creado para **[Un Fantasma en el Sistema](https://www.unfantasmaenelsistema.com/)**.
-Visita **[https://www.unfantasmaenelsistema.com/](https://www.unfantasmaenelsistema.com/)** para más recursos, artículos técnicos, ciberseguridad, sistemas y redes.
+## Créditos y licencia
+
+Desarrollado para **[Un Fantasma en el Sistema](https://www.unfantasmaenelsistema.com)**. Distribuido bajo licencia [MIT](LICENSE).

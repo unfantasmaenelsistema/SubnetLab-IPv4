@@ -381,8 +381,14 @@ export const VlsmArchitectView: React.FC = () => {
               value={baseIp}
               onChange={(e) => setBaseIp(e.target.value)}
               placeholder="192.168.10.0"
+              aria-invalid={!isValidIpv4(baseIp)}
               className="w-full px-3.5 py-2 text-sm font-mono font-semibold rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white"
             />
+            {!isValidIpv4(baseIp) && (
+              <p className="mt-1 text-[11px] font-medium text-rose-500">
+                IPv4 no válida: se muestra el cálculo con {safeBaseIp}.
+              </p>
+            )}
           </div>
 
           <div className="md:col-span-3">
@@ -487,6 +493,11 @@ export const VlsmArchitectView: React.FC = () => {
       )}
 
       {/* Address Space Proportional Allocation Bar */}
+      {quizMode && !quizVerified ? (
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 text-sm text-slate-600 dark:text-slate-400">
+          Mapa de ocupación oculto durante la autoevaluación: mostraría el prefijo de cada subred. Pulsa «Comprobar Diseño VLSM» o sal de la autoevaluación para verlo.
+        </div>
+      ) : (
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div>
@@ -547,6 +558,7 @@ export const VlsmArchitectView: React.FC = () => {
           ))}
         </div>
       </div>
+      )}
 
       {/* Add / Edit Segments + VLSM Allocation Table */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">

@@ -27,6 +27,7 @@ const INITIAL_STATS: PlayerStats = {
   bestStreak: 0,
   highScore60: 0,
   highScore180: 0,
+  highScore300: 0,
   totalScore: 0,
   history: [],
 };
@@ -96,7 +97,7 @@ export default function App() {
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors">
       {/* Top Bar Contract: 3 Zones separated by gap-8 */}
       <header className="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-8 px-6 py-3.5">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4 lg:gap-8 px-4 sm:px-6 py-3.5">
           {/* Zone 1: Single-line Brand Title with Logo */}
           <a
             href="#top"
@@ -110,7 +111,6 @@ export default function App() {
               <img
                 src={logoSrc}
                 alt="Logo Un Fantasma en el Sistema"
-                referrerPolicy="no-referrer"
                 onError={() => setLogoError(true)}
                 className="w-8 h-8 object-contain rounded-lg bg-white dark:bg-slate-800 p-0.5 border border-slate-200 dark:border-slate-700"
               />
@@ -123,7 +123,7 @@ export default function App() {
           </a>
 
           {/* Zone 2: 4 Clean Single-Line Text Navigation Links */}
-          <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600 dark:text-slate-400">
+          <nav className="hidden lg:flex items-center gap-6 text-sm font-medium text-slate-600 dark:text-slate-400">
             <button
               type="button"
               onClick={() => setActiveSection('challenger')}
@@ -178,7 +178,8 @@ export default function App() {
               rel="noopener noreferrer"
               className="px-4 py-2 text-xs font-semibold text-white bg-sky-600 hover:bg-sky-500 rounded-lg transition-colors whitespace-nowrap shrink-0 inline-flex items-center gap-1.5"
             >
-              <span>unfantasmaenelsistema.com</span>
+              <span className="hidden sm:inline">unfantasmaenelsistema.com</span>
+              <span className="sm:hidden">Web</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </a>
           </div>
@@ -187,7 +188,7 @@ export default function App() {
 
       {/* Workspace Brand Banner & Utility Controls */}
       <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
-        <div className="max-w-7xl mx-auto px-6 py-5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
           <div className="flex items-center gap-4">
             <a
               href="https://www.unfantasmaenelsistema.com/"
@@ -200,7 +201,6 @@ export default function App() {
                 <img
                   src={logoSrc}
                   alt="Un Fantasma en el Sistema"
-                  referrerPolicy="no-referrer"
                   onError={() => setLogoError(true)}
                   className="w-14 h-14 sm:w-16 sm:h-16 object-contain rounded-xl bg-white dark:bg-slate-950 p-1.5 border border-slate-200 dark:border-slate-800 group-hover:border-sky-500 transition-colors"
                 />
@@ -235,7 +235,7 @@ export default function App() {
           {/* Mobile Section Selector + Theme & Stats Controls */}
           <div className="flex flex-wrap items-center justify-between lg:justify-end gap-3">
             {/* Mobile-only navigation segmented control */}
-            <div className="flex md:hidden flex-wrap items-center gap-1 p-1 bg-slate-100 dark:bg-slate-950 rounded-lg border border-slate-200 dark:border-slate-800">
+            <div className="flex lg:hidden flex-wrap items-center gap-1 p-1 bg-slate-100 dark:bg-slate-950 rounded-lg border border-slate-200 dark:border-slate-800">
               {(
                 [
                   { id: 'challenger', label: 'Retador' },
@@ -296,7 +296,7 @@ export default function App() {
       </div>
 
       {/* Main Content Stage */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-6 py-8">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8">
         {activeSection === 'challenger' && (
           <ChallengerView stats={stats} onUpdateStats={handleUpdateStats} />
         )}
@@ -307,13 +307,12 @@ export default function App() {
 
       {/* Quiet Editorial Footer with User Brand & Website Link */}
       <footer className="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 mt-12">
-        <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
           <div className="flex items-center gap-3">
             {!logoError && (
               <img
                 src={logoSrc}
                 alt="Logo Un Fantasma en el Sistema"
-                referrerPolicy="no-referrer"
                 onError={() => setLogoError(true)}
                 className="w-7 h-7 object-contain rounded-md bg-white dark:bg-slate-800 p-0.5 border border-slate-200 dark:border-slate-700"
               />
@@ -332,7 +331,7 @@ export default function App() {
             </span>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
             <button
               type="button"
               onClick={() => setActiveSection('challenger')}
