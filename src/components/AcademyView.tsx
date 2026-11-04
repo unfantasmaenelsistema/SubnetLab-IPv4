@@ -271,7 +271,7 @@ export const AcademyView: React.FC = () => {
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <div className="flex items-center gap-1 p-1 bg-slate-100 dark:bg-slate-950 rounded-lg border border-slate-200/70 dark:border-slate-800">
+            <div className="flex flex-wrap items-center gap-1 p-1 bg-slate-100 dark:bg-slate-950 rounded-lg border border-slate-200/70 dark:border-slate-800">
               {(
                 [
                   { id: 'all', label: 'Todos (/8–/32)' },

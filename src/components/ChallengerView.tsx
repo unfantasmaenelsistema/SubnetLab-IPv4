@@ -39,6 +39,7 @@ export interface PlayerStats {
   bestStreak: number;
   highScore60: number;
   highScore180: number;
+  highScore300?: number;
   totalScore: number;
   history: {
     id: string;
@@ -98,6 +99,8 @@ export const ChallengerView: React.FC<Props> = ({ stats, onUpdateStats }) => {
   const [showHint, setShowHint] = useState<boolean>(false);
   const [showBinaryRuler, setShowBinaryRuler] = useState<boolean>(false);
   const [showSteps, setShowSteps] = useState<boolean>(false);
+  const [hintUsed, setHintUsed] = useState<boolean>(false);
+  const [solutionRevealed, setSolutionRevealed] = useState<boolean>(false);
 
   // User Form Inputs (Full Network & Binary Drill)
   const [ansNetwork, setAnsNetwork] = useState<string>('');
@@ -149,6 +152,8 @@ export const ChallengerView: React.FC<Props> = ({ stats, onUpdateStats }) => {
     setEvaluated(null);
     setShowHint(false);
     setShowSteps(false);
+    setHintUsed(false);
+    setSolutionRevealed(false);
     setLastPointsEarned(null);
     setQuestionStartSec(elapsedSeconds);
   };
@@ -499,22 +504,23 @@ export const ChallengerView: React.FC<Props> = ({ stats, onUpdateStats }) => {
     const correctCount = entries.filter((x) => x.isCorrect).length;
     const totalFields = entries.length;
     const accuracyRatio = totalFields > 0 ? correctCount / totalFields : 0;
-    const allCorrect = correctCount === totalFields;
+    // Si se ha pulsado «Resolver y Explicar», el reto no cuenta como resuelto ni puntúa.
+    const allCorrect = correctCount === totalFields && !solutionRevealed;
 
     const diffMult =
-      difficulty === 'beginner'
+      challenge.difficulty === 'beginner'
         ? 1
-        : difficulty === 'intermediate'
+        : challenge.difficulty === 'intermediate'
         ? 1.5
-        : difficulty === 'advanced'
+        : challenge.difficulty === 'advanced'
         ? 2.2
         : 2.5;
     const timeSpent = Math.max(1, elapsedSeconds - questionStartSec);
     const speedBonus = Math.max(0, Math.round((45 - timeSpent) * 2));
-    const hintPenalty = showHint ? 0.7 : 1;
-    const rawPoints = Math.round(
-      (correctCount * 25 + (allCorrect ? 50 + speedBonus : 0)) * diffMult * hintPenalty
-    );
+    const hintPenalty = hintUsed ? 0.7 : 1;
+    const rawPoints = solutionRevealed
+      ? 0
+      : Math.round((correctCount * 25 + (allCorrect ? 50 + speedBonus : 0)) * diffMult * hintPenalty);
 
     setLastPointsEarned(rawPoints);
     const nextSessionScore = sessionScore + rawPoints;
@@ -530,6 +536,10 @@ export const ChallengerView: React.FC<Props> = ({ stats, onUpdateStats }) => {
         timerMode === '60s' ? Math.max(prev.highScore60, nextSessionScore) : prev.highScore60;
       const highScore180 =
         timerMode === '180s' ? Math.max(prev.highScore180, nextSessionScore) : prev.highScore180;
+      const highScore300 =
+        timerMode === '300s'
+          ? Math.max(prev.highScore300 ?? 0, nextSessionScore)
+          : prev.highScore300 ?? 0;
 
       const promptLabel =
         challenge.category === 'topology_design' && challenge.topology
@@ -560,6 +570,7 @@ export const ChallengerView: React.FC<Props> = ({ stats, onUpdateStats }) => {
         bestStreak,
         highScore60,
         highScore180,
+        highScore300,
         totalScore: prev.totalScore + rawPoints,
         history: [
           {
@@ -571,7 +582,7 @@ export const ChallengerView: React.FC<Props> = ({ stats, onUpdateStats }) => {
             prompt: promptLabel,
             category: catLabel,
             score: rawPoints,
-            accuracy: Math.round(accuracyRatio * 100),
+            accuracy: solutionRevealed ? 0 : Math.round(accuracyRatio * 100),
             timeSpentSec: timeSpent,
           },
           ...prev.history.slice(0, 19),
@@ -621,6 +632,7 @@ export const ChallengerView: React.FC<Props> = ({ stats, onUpdateStats }) => {
       setAnsBroadcast(a.broadcastAddress);
     }
     setShowSteps(true);
+    setSolutionRevealed(true);
   };
 
   const handleExportProgressJson = () => {
@@ -850,7 +862,10 @@ export const ChallengerView: React.FC<Props> = ({ stats, onUpdateStats }) => {
             </button>
             <button
               type="button"
-              onClick={() => setShowHint((v) => !v)}
+              onClick={() => {
+                setShowHint((v) => !v);
+                setHintUsed(true);
+              }}
               className="px-3 py-1.5 text-xs font-medium rounded-lg border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors whitespace-nowrap shrink-0 flex items-center gap-1.5"
             >
               <HelpCircle className="w-3.5 h-3.5 text-amber-500" />
@@ -1247,7 +1262,10 @@ export const ChallengerView: React.FC<Props> = ({ stats, onUpdateStats }) => {
                   Resultado de la verificación
                 </div>
                 <div className="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-1.5">
-                  <Award className="w-4 h-4 text-amber-500" />+{lastPointsEarned} puntos obtenidos
+                  <Award className="w-4 h-4 text-amber-500" />
+                  {solutionRevealed
+                    ? 'Solución revelada: 0 puntos y la racha vuelve a 0'
+                    : `+${lastPointsEarned} puntos obtenidos${hintUsed ? ' (con pista: ×0,7)' : ''}`}
                 </div>
               </div>
               <button
@@ -1282,7 +1300,7 @@ export const ChallengerView: React.FC<Props> = ({ stats, onUpdateStats }) => {
               className="px-3 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-700 rounded-lg transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0"
             >
               <Eye className="w-3.5 h-3.5" />
-              Resolver y Explicar
+              Resolver y Explicar (0 puntos)
             </button>
           </div>
 
@@ -1944,7 +1962,12 @@ export const ChallengerView: React.FC<Props> = ({ stats, onUpdateStats }) => {
               <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
                 <div className="text-xs text-slate-500 font-sans">Récord Personal</div>
                 <div className="text-lg font-bold text-slate-900 dark:text-white mt-1">
-                  {timerMode === '60s' ? stats.highScore60 : stats.highScore180} pts
+                  {timerMode === '60s'
+                    ? stats.highScore60
+                    : timerMode === '300s'
+                    ? stats.highScore300 ?? 0
+                    : stats.highScore180}{' '}
+                  pts
                 </div>
               </div>
             </div>

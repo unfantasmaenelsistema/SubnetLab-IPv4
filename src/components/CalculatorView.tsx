@@ -510,11 +510,11 @@ export const CalculatorView: React.FC = () => {
                 Generador de Configuración CLI Real (Router / Switch / Linux)
               </h3>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Comandos reales listos para producción basados en la subred calculada ({analysis.networkAddress}/{cidr}).
+                Ejemplos de configuración para la subred calculada ({analysis.networkAddress}/{cidr}): adáptalos (interfaz, DNS, área OSPF) antes de usarlos en un equipo real.
               </p>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <div className="flex items-center gap-1 text-xs">
                 <span className="text-slate-500">VLAN:</span>
                 <input
@@ -630,7 +630,7 @@ export const CalculatorView: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3 min-w-0">
             <label className="text-xs font-medium text-slate-700 dark:text-slate-300 whitespace-nowrap">
               Subdividir hacia prefijo:
             </label>
@@ -638,7 +638,7 @@ export const CalculatorView: React.FC = () => {
               value={effectiveSubdivideCidr}
               onChange={(e) => setSubdivideTargetCidr(Number(e.target.value))}
               aria-label="Seleccionar prefijo CIDR de subdivisión"
-              className="px-3 py-1.5 text-xs font-mono rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white"
+              className="min-w-0 max-w-full px-3 py-1.5 text-xs font-mono rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white"
             >
               {Array.from({ length: 32 - cidr + 1 }, (_, i) => cidr + i).map((c) => (
                 <option key={c} value={c}>

@@ -264,16 +264,30 @@ export function getIpClassAndScope(ipInt: number): {
     defaultClassCidr = 24;
   } else if (firstOctet <= 239) {
     ipClass = 'D';
-    defaultClassCidr = 4;
+    defaultClassCidr = 0; // sin máscara por defecto: no se divide en subredes
   } else {
     ipClass = 'E';
-    defaultClassCidr = 4;
+    defaultClassCidr = 0;
   }
 
   let scope = 'Pública Enrutable (Unicast)';
   let isRfc1918 = false;
 
-  if (firstOctet === 10) {
+  const thirdOctet = (ipInt >>> 8) & 255;
+
+  if (firstOctet === 0) {
+    scope = 'Esta red (RFC 1122 · 0.0.0.0/8) · no enrutable';
+  } else if (ipInt >>> 0 === 0xffffffff) {
+    scope = 'Broadcast limitado (255.255.255.255)';
+  } else if (
+    (firstOctet === 192 && secondOctet === 0 && thirdOctet === 2) ||
+    (firstOctet === 198 && secondOctet === 51 && thirdOctet === 100) ||
+    (firstOctet === 203 && secondOctet === 0 && thirdOctet === 113)
+  ) {
+    scope = 'Documentación (RFC 5737) · solo para ejemplos, no enrutable';
+  } else if (firstOctet === 198 && (secondOctet === 18 || secondOctet === 19)) {
+    scope = 'Pruebas de rendimiento (RFC 2544 · 198.18.0.0/15)';
+  } else if (firstOctet === 10) {
     scope = 'Privada RFC 1918 (Clase A · 10.0.0.0/8)';
     isRfc1918 = true;
   } else if (firstOctet === 172 && secondOctet >= 16 && secondOctet <= 31) {
@@ -333,7 +347,7 @@ export function analyzeIpv4(ip: string, cidrInput: number): SubnetAnalysis {
 
   const { ipClass, defaultClassCidr, scope, isRfc1918 } = getIpClassAndScope(ipInt);
   const hostBits = 32 - cidr;
-  const borrowedBits = Math.max(0, cidr - defaultClassCidr);
+  const borrowedBits = defaultClassCidr > 0 ? Math.max(0, cidr - defaultClassCidr) : 0;
   const subnetsFromDefault = Math.pow(2, borrowedBits);
 
   let interestingOctetIndex = 3;
@@ -521,8 +535,16 @@ export function getStepByStepExplanation(analysis: SubnetAnalysis): StepExplanat
       stepNumber: '05',
       title: 'Rango de Hosts Disponibles y Capacidad Total',
       summary: `El primer host es Red + 1 y el último host es Broadcast - 1. Se reservan 2 direcciones (Red y Broadcast).`,
-      formula: `Hosts útiles = 2^${analysis.hostBits} - 2 = ${analysis.usableHosts.toLocaleString('es-ES')} (${analysis.firstHost} — ${analysis.lastHost})`,
-      detail: `Desde la máscara por defecto /${analysis.defaultClassCidr} (Clase ${analysis.ipClass}), se tomaron ${analysis.borrowedBits} bits prestados creando 2^${analysis.borrowedBits} = ${analysis.subnetsFromDefault.toLocaleString('es-ES')} subredes.`,
+      formula:
+        analysis.cidr === 32
+          ? `/32 = una sola dirección (ruta de host o loopback): ${analysis.firstHost}`
+          : analysis.cidr === 31
+          ? `/31 = 2 direcciones, ambas utilizables en enlaces punto a punto (RFC 3021): ${analysis.firstHost} y ${analysis.lastHost}`
+          : `Hosts útiles = 2^${analysis.hostBits} - 2 = ${analysis.usableHosts.toLocaleString('es-ES')} (${analysis.firstHost} — ${analysis.lastHost})`,
+      detail:
+        analysis.defaultClassCidr === 0
+          ? `Las direcciones de clase ${analysis.ipClass} (${analysis.ipClass === 'D' ? 'multicast' : 'experimentales'}) no tienen máscara por defecto ni se reparten entre hosts: el cálculo es solo un ejercicio binario.`
+          : `Desde la máscara por defecto /${analysis.defaultClassCidr} (Clase ${analysis.ipClass}), se tomaron ${analysis.borrowedBits} bits prestados creando 2^${analysis.borrowedBits} = ${analysis.subnetsFromDefault.toLocaleString('es-ES')} subredes.`,
     },
   ];
 }
@@ -592,20 +614,20 @@ export function calculateVlsm(
     const blockAddresses = Math.pow(2, hostBits);
 
     if (cursorInt % blockAddresses !== 0) {
-      cursorInt = (Math.ceil(cursorInt / blockAddresses) * blockAddresses) >>> 0;
+      cursorInt = Math.ceil(cursorInt / blockAddresses) * blockAddresses;
     }
 
-    const netInt = cursorInt >>> 0;
-    const bcastInt = (netInt + blockAddresses - 1) >>> 0;
+    const netInt = cursorInt;
+    const bcastInt = netInt + blockAddresses - 1; // sin >>> 0: si pasa de 2^32 debe contar como desbordamiento
     const overflow = bcastInt > baseEndInt || allocatedCidr < baseCidr;
     if (overflow) hasOverflow = true;
 
-    const subAnalysis = analyzeIpv4(intToIp(netInt), allocatedCidr);
+    const subAnalysis = analyzeIpv4(intToIp(netInt >>> 0), allocatedCidr);
     const usable = subAnalysis.usableHosts;
     const wasted = Math.max(0, usable - req);
     const util = usable > 0 ? Math.min(100, Math.round((req / usable) * 100)) : 100;
 
-    cursorInt = (bcastInt + 1) >>> 0;
+    cursorInt = bcastInt + 1;
     if (!overflow) {
       totalAllocatedAddresses += blockAddresses;
     }
@@ -817,12 +839,22 @@ function generateTroubleshootingScenario(difficulty: DifficultyLevel): {
   givenCidr: number;
   troubleshooting: TroubleshootingScenario;
 } {
-  const cidr =
+  const faultTypes: TroubleshootingFaultType[] = [
+    'host_is_network_id',
+    'host_is_broadcast',
+    'different_subnet',
+    'wrong_mask',
+  ];
+  const faultType = faultTypes[randInt(0, faultTypes.length - 1)];
+
+  const randomCidr =
     difficulty === 'beginner'
       ? randInt(25, 29)
       : difficulty === 'intermediate'
       ? randInt(21, 29)
       : randInt(18, 30);
+  // Con «máscara errónea» el host usa 2 bits más: hace falta un bloque de al menos 16 direcciones.
+  const cidr = faultType === 'wrong_mask' ? Math.min(randomCidr, 28) : randomCidr;
 
   const baseIp =
     cidr >= 24
@@ -831,14 +863,6 @@ function generateTroubleshootingScenario(difficulty: DifficultyLevel): {
 
   const gwAnalysis = analyzeIpv4(baseIp, cidr);
   const gatewayIp = gwAnalysis.firstHost; // Standard gateway = first usable host
-
-  const faultTypes: TroubleshootingFaultType[] = [
-    'host_is_network_id',
-    'host_is_broadcast',
-    'different_subnet',
-    'wrong_mask',
-  ];
-  const faultType = faultTypes[randInt(0, faultTypes.length - 1)];
 
   let hostIp = gwAnalysis.lastHost;
   let hostCidr = cidr;
@@ -851,14 +875,18 @@ function generateTroubleshootingScenario(difficulty: DifficultyLevel): {
     hostIp = gwAnalysis.broadcastAddress;
     faultExplanation = `El host intenta utilizar la dirección de Broadcast del bloque (${gwAnalysis.broadcastAddress}), reservada para difusión a todos los nodos.`;
   } else if (faultType === 'different_subnet') {
-    const nextSubnetInt = (ipToInt(gwAnalysis.broadcastAddress) + randInt(2, 10)) >>> 0;
-    hostIp = intToIp(nextSubnetInt);
+    const nextNetworkInt = (ipToInt(gwAnalysis.broadcastAddress) + 1) >>> 0;
+    const nextHostOffset = randInt(1, Math.max(1, gwAnalysis.usableHosts));
+    hostIp = intToIp((nextNetworkInt + nextHostOffset) >>> 0);
     faultExplanation = `La IP del host (${hostIp}) cae fuera del rango de la subred del Gateway (${gwAnalysis.firstHost} — ${gwAnalysis.lastHost}) y pertenece al bloque siguiente.`;
   } else {
     // wrong_mask
-    const validHostInt = (ipToInt(gwAnalysis.firstHost) + Math.max(1, Math.floor(gwAnalysis.usableHosts / 2))) >>> 0;
-    hostIp = intToIp(validHostInt);
-    hostCidr = Math.min(30, cidr + 2);
+    // Máscara más larga (+2 bits): el host cree que su subred es una cuarta parte de la real.
+    // Se elige un host del último cuarto, así el gateway (primer host) queda fuera de su subred.
+    hostCidr = cidr + 2;
+    const quarter = Math.pow(2, 32 - hostCidr);
+    const lastQuarterStart = ipToInt(gwAnalysis.networkAddress) + 3 * quarter;
+    hostIp = intToIp((lastQuarterStart + randInt(1, quarter - 2)) >>> 0);
     faultExplanation = `Aunque la IP del host (${hostIp}) está dentro del rango del Gateway, tiene configurada una máscara /${hostCidr} distinta a la del Gateway (/${cidr}), provocando un cálculo erróneo de dominio de broadcast.`;
   }
 
